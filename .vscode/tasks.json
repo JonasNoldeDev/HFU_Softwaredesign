@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/Aufgabe_1/A01_Koerpereigenschaften/A01_Koerpereigenschaften.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

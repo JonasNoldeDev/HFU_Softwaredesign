@@ -1,0 +1,10 @@
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\bin\Debug\netcoreapp2.0\Aufgabe_3.deps.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\bin\Debug\netcoreapp2.0\Aufgabe_3.runtimeconfig.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\bin\Debug\netcoreapp2.0\Aufgabe_3.runtimeconfig.dev.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\bin\Debug\netcoreapp2.0\Aufgabe_3.dll
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\bin\Debug\netcoreapp2.0\Aufgabe_3.pdb
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\obj\Debug\netcoreapp2.0\Aufgabe_3.csproj.CoreCompileInputs.cache
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\obj\Debug\netcoreapp2.0\Aufgabe_3.AssemblyInfoInputs.cache
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\obj\Debug\netcoreapp2.0\Aufgabe_3.AssemblyInfo.cs
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\obj\Debug\netcoreapp2.0\Aufgabe_3.dll
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Aufgabe_3\obj\Debug\netcoreapp2.0\Aufgabe_3.pdb

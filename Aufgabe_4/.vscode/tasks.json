@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Aufgabe_1/A01_Koerpereigenschaften/A01_Koerpereigenschaften.csproj"
+                "${workspaceFolder}/Aufgabe_4.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aufgabe_4
+namespace Aufgabe_5
 {
     class Program
     {
@@ -26,7 +26,6 @@ namespace Aufgabe_4
             root.PrintTree();
 
             List<TreeNode<String>> resultList = root.Find("child1", new List<TreeNode<String>>());
-            Console.WriteLine(resultList);
         }
 
         public class Tree<G>

@@ -12,3 +12,6 @@
 
 ## Aufgabe 4
 * [Aufgabe 4.1](Aufgabe_4/Program.cs)
+
+## Aufgabe 5
+* [Aufgabe 5.1](Aufgabe_5/Program.cs)

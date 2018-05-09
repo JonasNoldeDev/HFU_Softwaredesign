@@ -25,7 +25,13 @@ namespace Aufgabe_5
 
             root.PrintTree();
 
-            List<TreeNode<String>> resultList = root.Find("child1", new List<TreeNode<String>>());
+            String searchFor = "child1";
+            var resultList = root.Find(searchFor);
+
+            Console.WriteLine();
+            Console.WriteLine("Gefundene Knoten mit dem Inhalt \"" + searchFor + "\":");
+            if (resultList.Count == 0) Console.WriteLine("Keine Knoten gefunden");
+            foreach(var element in resultList) Console.WriteLine(element._nodeContent.ToString());
         }
 
         public class Tree<G>
@@ -71,8 +77,13 @@ namespace Aufgabe_5
                     }
                 }
             }
-            public List<TreeNode<G>> Find(G contentToFind, List<TreeNode<G>> listToReturn)
+            public List<TreeNode<G>> Find(G contentToFind, List<TreeNode<G>> listToReturn = null)
             {
+                if (listToReturn == null)
+                {
+                    listToReturn = new List<TreeNode<G>>();
+                }
+
                 if (_nodeContent.Equals(contentToFind))
                 {
                     listToReturn.Add(this);

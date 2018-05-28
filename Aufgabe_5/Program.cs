@@ -7,98 +7,75 @@ namespace Aufgabe_5
     {
         static void Main(string[] args)
         {
-            var tree = new Tree<String>();
-            var root = tree.CreateNode("root");
-            var child1 = tree.CreateNode("child1");
-            var child2 = tree.CreateNode("child1");
-            root.AppendChild(child1);
-            root.AppendChild(child2);
-            var grand11 = tree.CreateNode("grand11");
-            var grand12 = tree.CreateNode("grand12");
-            var grand13 = tree.CreateNode("grand13");
-            child1.AppendChild(grand11);
-            child1.AppendChild(grand12);
-            child1.AppendChild(grand13);
-            var grand21 = tree.CreateNode("grand21");
-            child2.AppendChild(grand21);
-            child1.RemoveChild(grand12);
-
-            root.PrintTree();
-
-            String searchFor = "child1";
-            var resultList = root.Find(searchFor);
-
-            Console.WriteLine();
-            Console.WriteLine("Gefundene Knoten mit dem Inhalt \"" + searchFor + "\":");
-            if (resultList.Count == 0) Console.WriteLine("Keine Knoten gefunden");
-            foreach(var element in resultList) Console.WriteLine(element._nodeContent.ToString());
         }
+    }
 
-        public class Tree<G>
+    class Person
+    {
+        public string Name;
+        public int Age;
+    }
+
+    class Lecturer : Person
+    {
+        public string Office;
+        public string Consultation;
+        public List<Course> Courses;
+
+        public void ShowCourses ()
         {
-            public TreeNode<G> CreateNode(G content)
+            Console.WriteLine(this.Name + "'s Courses:");
+
+            foreach (var course in Courses)
             {
-                return new TreeNode<G>(content);
+                Console.WriteLine(course.Title);
             }
         }
 
-        public class TreeNode<G>
+        public void ShowParticipants ()
         {
-            public G _nodeContent;
-            public TreeNode<G> _parentNode;
-            public List<TreeNode<G>> _childNodes;
+            Console.WriteLine(this.Name + "'s Participants:");
 
-            public TreeNode(G content)
+            List<Participant> participants = new List<Participant>();
+
+            foreach (var course in Courses)
             {
-                _nodeContent = content;
-                _childNodes = new List<TreeNode<G>>();
-            }
-
-            public void AppendChild(TreeNode<G> nodeToAdd)
-            {
-                _childNodes.Add(nodeToAdd);
-                nodeToAdd._parentNode = this;
-            }
-
-            public void RemoveChild(TreeNode<G> nodeToRemove)
-            {
-                _childNodes.Remove(nodeToRemove);
-            }
-
-            public void PrintTree(String levelBuffer = "")
-            {
-                Console.WriteLine(levelBuffer + _nodeContent.ToString());
-
-                if (_childNodes.Count > 0)
+                foreach (var participant in course.Participants)
                 {
-                    foreach(var node in _childNodes)
+                    if (!participants.Contains(participant))
                     {
-                        node.PrintTree(levelBuffer + "*");
+                        participants.Add(participant);
                     }
                 }
             }
-            public List<TreeNode<G>> Find(G contentToFind, List<TreeNode<G>> listToReturn = null)
+
+            foreach (var participant in participants)
             {
-                if (listToReturn == null)
-                {
-                    listToReturn = new List<TreeNode<G>>();
-                }
-
-                if (_nodeContent.Equals(contentToFind))
-                {
-                    listToReturn.Add(this);
-                }
-
-                if (_childNodes.Count > 0)
-                {
-                    foreach (var node in _childNodes)
-                    {
-                        node.Find(contentToFind, listToReturn);
-                    }
-                }
-            
-                return listToReturn;
+                Console.WriteLine(participant.Name);
             }
+        }
+    }
+
+    class Participant : Person
+    {
+        public int MatriculationNumber;
+
+        public List<Course> Courses;
+    }
+
+    class Course
+    {
+        public string Title;
+        public string Date;
+        public string Room;
+        public Lecturer Lecturer;
+        public List<Participant> Participants;
+        
+        public void ShowInformation ()
+        {
+            Console.WriteLine("Course: " + Title);
+            Console.WriteLine("Date: " + Date);
+            Console.WriteLine("Room: " + Room);
         }
     }
 }

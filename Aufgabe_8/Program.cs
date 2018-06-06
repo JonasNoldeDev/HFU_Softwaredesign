@@ -50,7 +50,7 @@ namespace Aufgabe_8
                 // Abbruchbedingung: Spielfeld ist voll => Spieler gewinnt
                 if (GetWinner() != '0')
                 {
-                    EndOfGameAnnouncement = $"Très bien Spieler {_CurrentPlayer}. Du hast gewonnen!";
+                    EndOfGameAnnouncement = $"Très bien Spieler {GetWinner()}. Du hast gewonnen!";
                     break;
                 }
 

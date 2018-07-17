@@ -1,0 +1,11 @@
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\bin\Debug\netcoreapp2.0\Textadventure.deps.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\bin\Debug\netcoreapp2.0\Textadventure.runtimeconfig.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\bin\Debug\netcoreapp2.0\Textadventure.runtimeconfig.dev.json
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\bin\Debug\netcoreapp2.0\Textadventure.dll
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\bin\Debug\netcoreapp2.0\Textadventure.pdb
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.csprojResolveAssemblyReference.cache
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.csproj.CoreCompileInputs.cache
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.AssemblyInfoInputs.cache
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.AssemblyInfo.cs
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.dll
+C:\Users\Jonas\Documents\GitHubRepositories\HFU_Softwaredesign\Textadventure\obj\Debug\netcoreapp2.0\Textadventure.pdb

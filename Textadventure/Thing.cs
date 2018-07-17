@@ -7,13 +7,13 @@ namespace Textadventure
     {
         public String Name;
         public String Description;
+        public String UniqueID = Helpers.NewUniqueID() + "";
         public Area CurrentArea;
-        public String InteractionDescription;
         public Action Interaction;
 
         public void MoveToArea(Area areaToMove)
         {
-            CurrentArea.Things.Remove(this);
+            if (CurrentArea != null) CurrentArea.Things.Remove(this);
             CurrentArea = areaToMove;
             CurrentArea.Things.Add(this);
         }

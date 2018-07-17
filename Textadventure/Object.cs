@@ -5,6 +5,6 @@ namespace Textadventure
 {
     class Object : Thing
     {
-        public static ConsoleColor Color = ConsoleColor.Blue;
+        public static ConsoleColor Color = ConsoleColor.Red;
     }
 }

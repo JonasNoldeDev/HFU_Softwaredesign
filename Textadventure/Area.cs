@@ -5,7 +5,8 @@ namespace Textadventure
 {
     class Area : Thing
     {
-        public Area[] Directions;
-        public List<Thing> Things;
+        public static ConsoleColor Color = ConsoleColor.Blue;
+        public Dictionary<string, Area> Directions = new Dictionary<string, Area>();
+        public List<Thing> Things = new List<Thing>();
     }
 }

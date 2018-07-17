@@ -11,74 +11,79 @@ namespace Textadventure
                 Area alcimedesShack = new Area()
                 {
                     Name = "Alcimedes' Shack",
-                    Description = "..."
+                    Description = "Ahh! So this is Alcimedes' Shack."
                 };
                 Area colorfulFields = new Area()
                 {
                     Name = "The Colorful Fields",
-                    Description = "..."
+                    Description = "Wow! These are colorful fields."
                 };
                 Area deepCaves = new Area()
                 {
                     Name = "The Deep Caves",
-                    Description = "..."
+                    Description = "Ahh! So these are the Deep Caves"
                 };
                 Area infiniteWoodlands = new Area()
                 {
                     Name = "The Infinite Woodlands",
-                    Description = "..."
+                    Description = "Ahh! So these are the Infinite Woodlands"
                 };
                 Area monastery = new Area()
                 {
                     Name = "The Monastery",
-                    Description = "..."
+                    Description = "Ahh! So that's the Monastery"
                 };
 
-                alcimedesShack.Directions = new Area[]{infiniteWoodlands, null, null, colorfulFields};
-                colorfulFields.Directions = new Area[]{monastery, alcimedesShack, null, null};
-                deepCaves.Directions = new Area[]{null, null, alcimedesShack, infiniteWoodlands};
-                infiniteWoodlands.Directions = new Area[]{null, deepCaves, alcimedesShack, monastery};
-                monastery.Directions = new Area[]{null, infiniteWoodlands, colorfulFields, null};
+                alcimedesShack.Directions.Add("north", infiniteWoodlands);
+                alcimedesShack.Directions.Add("west", colorfulFields);
+                colorfulFields.Directions.Add("north", monastery);
+                colorfulFields.Directions.Add("east", alcimedesShack);
+                deepCaves.Directions.Add("west", infiniteWoodlands);
+                infiniteWoodlands.Directions.Add("east", deepCaves);
+                infiniteWoodlands.Directions.Add("south", alcimedesShack);
+                infiniteWoodlands.Directions.Add("west", monastery);
+                monastery.Directions.Add("east", infiniteWoodlands);
+                monastery.Directions.Add("south", colorfulFields);
             #endregion
 
             #region Initialize Items
                 Item yellowHerb = new Item()
                 {
                     Name = "Yellow Herb",
-                    Description = "..."
+                    Description = "Yellow Herb"
                 };
                 Item blueHerb = new Item()
                 {
                     Name = "Blue Herb",
-                    Description = "..."
+                    Description = "Blue Herb"
                 };
                 Item redHerb = new Item()
                 {
                     Name = "Red Herb",
-                    Description = "..."
+                    Description = "Red Herb"
                 };
                 Item whiteHerb = new Item()
                 {
                     Name = "White Herb",
-                    Description = "..."
+                    Description = "White Herb"
                 };
                 Item magicRod = new Item()
                 {
                     Name = "Magic Rod",
-                    Description = "..."
+                    Description = "Magic Rod"
                 };
                 Item medicine = new Item()
                 {
                     Name = "Herbal Medicine",
-                    Description = "..."
+                    Description = "Herbal Medicine"
                 };
             #endregion
 
             #region Initialize Objects
                 Object kettle = new Object()
                 {
-                    Name = "Yellow Herb",
-                    Description = "..."
+                    Name = "Kettle",
+                    Description = "A huge kettle"
                 };
             #endregion
 
@@ -86,15 +91,15 @@ namespace Textadventure
                 Character player = new Character()
                 {
                     Name = "Player",
-                    Description = "a young druid's apprentice",
-                    InventorySize = 4,
+                    Description = "A young druid's apprentice",
+                    InventorySize = 10,
                     Health = 10,
                     Attack = 10
                 };
                 Character alcimedes = new Character()
                 {
                     Name = "Alcimedes",
-                    Description = "an old druid, whose motto is 'a liquor a day keeps the doctor away'",
+                    Description = "Alcimedes, an old druid and also your teacher",
                     InventorySize = 10,
                     Health = 5,
                     Attack = 0
@@ -102,7 +107,7 @@ namespace Textadventure
                 Character mary = new Character()
                 {
                     Name = "Mary",
-                    Description = "a beautiful flower maiden with curly blonde hair",
+                    Description = "A beautiful flower maiden with curly blonde hair",
                     InventorySize = 10,
                     Health = 10,
                     Attack = 0
@@ -110,7 +115,7 @@ namespace Textadventure
                 Character bear = new Character()
                 {
                     Name = "The grizzly",
-                    Description = "a big gray grizzly bear",
+                    Description = "A big gray grizzly bear",
                     InventorySize = 10,
                     Health = 15,
                     Attack = 3,
@@ -119,7 +124,7 @@ namespace Textadventure
                 Character monk = new Character()
                 {
                     Name = "Mohammed Lee",
-                    Description = "a misterious monk",
+                    Description = "A misterious monk",
                     InventorySize = 10,
                     Health = 10,
                     Attack = 6,
@@ -146,11 +151,32 @@ namespace Textadventure
             #endregion
 
             #region Initialize Game Steps
-                GameStep[] gameSteps = new GameStep[] 
+                GameStep[] gameSteps = new GameStep[]
                 {
-                    new GameStep(
-                        Game.CurrentGame.Player.Inventory.Contains(magicRod),
-                        "Talk to Alcimedes."
+                    new GameStep( // 0
+                        () => Game.CurrentGame.Player.Inventory.Contains(magicRod),
+                        "Talk to Alcimedes"
+                    ),
+                    new GameStep( // 1
+                        () => {
+                            foreach (var herb in new Item[]{redHerb, yellowHerb, whiteHerb, blueHerb})
+                            {
+                                if (!Game.CurrentGame.Player.Inventory.Contains(herb))
+                                {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        },
+                        "Collect the four herbs"
+                    ),
+                    new GameStep( // 2
+                        () => Game.CurrentGame.Player.Inventory.Contains(medicine),
+                        "Brew the medicine in Alcimedes' kettle"
+                    ),
+                    new GameStep( // 3
+                        () => alcimedes.Inventory.Contains(medicine),
+                        "Bring the medicine to Alcimedes"
                     )
                     // get fire wood ?
                     // get all herbs
@@ -161,41 +187,62 @@ namespace Textadventure
             #region Add Interactions
                 void kettleInteraction()
                 {
-                    bool allHerbsAvailable = true;
-                    Item[] requiredHerbs = new Item[]{ yellowHerb, blueHerb, redHerb, whiteHerb };
-                    String missingHerbsMessage  = "The following herbs are missing for brewing the medicine:\n";
-                    foreach (var herb in requiredHerbs)
+                    if (Game.CurrentGame.CurrentGameProgressStep <= 2)
                     {
-                        if (!Game.CurrentGame.Player.Inventory.Contains(herb))
+                        bool allHerbsAvailable = true;
+                        Item[] requiredHerbs = new Item[]{ yellowHerb, blueHerb, redHerb, whiteHerb };
+                        String missingHerbsMessage  = "Collect the last four herbs to finish brewing the medicine.\nThe following herbs are missing in your inventory:\n";
+                        foreach (var herb in requiredHerbs)
                         {
-                            allHerbsAvailable = false;
-                            missingHerbsMessage += herb.Name + "\n";
+                            if (!Game.CurrentGame.Player.Inventory.Contains(herb))
+                            {
+                                allHerbsAvailable = false;
+                                missingHerbsMessage += herb.Name + "\n";
+                            }
                         }
-                    }
-                    missingHerbsMessage += "I have to find them and come back here again.";
-                    if (allHerbsAvailable)
-                    {
-                        if (Game.CurrentGame.Player.InventorySize < Game.CurrentGame.Player.Inventory.Count)
+                        missingHerbsMessage += "You have to find them and come back here again.";
+                        if (allHerbsAvailable)
                         {
                             foreach (var herb in requiredHerbs)
                             {
                                 Game.CurrentGame.Player.Inventory.Remove(herb);
                             }
                             Game.CurrentGame.Player.Inventory.Add(medicine);
-                            Console.WriteLine("All the herbs are gone.. But finally I have the medicine for Alcimedes!");
+                            Console.WriteLine("All the herbs are gone.. But finally you have the medicine for Alcimedes!");
                         }
                         else
                         {
-                            Console.WriteLine("Inventory is full.");
+                            Console.WriteLine(missingHerbsMessage);
                         }
                     }
                     else
                     {
-                        Console.WriteLine(missingHerbsMessage);
+                        Console.WriteLine("The kettle is completely emty.");
                     }
                 };
                 kettle.Interaction = kettleInteraction;
-                kettle.InteractionDescription = "Collect the last four herbs in order to finish the brewing process.";
+
+                void alcimedesInteraction()
+                {
+                    switch (Game.CurrentGame.CurrentGameProgressStep)
+                    {
+                        case 0:
+                            Console.WriteLine("Alcimedes: Hello again. Here's a rod. I don't need it anyway. Well... Nobody does.");
+                            Game.CurrentGame.Player.AddToInventory(magicRod);
+                            Console.WriteLine("Alcimedes: In exchange I want you to finish brewing my herbal medicine. It's brewed out of 56 herbs - really delicious!");
+                            Console.WriteLine("Alcimedes: I just need the last four herbs but that's no problem for you, right?");
+                            break;
+                        case 3:
+                            Game.CurrentGame.Player.RemoveFromInventory(medicine);
+                            alcimedes.AddToInventory(medicine);
+                            Console.WriteLine("Alcimedes: Oh! Perfect! There's my beloved Jägerm-m-mm-medicine... Thank you!");
+                            break;
+                        default:
+                            Console.WriteLine("Alcimedes: What a nice day for a bourbon, huh?");
+                            break;
+                    }
+                }
+                alcimedes.Interaction = alcimedesInteraction;
 
                 // kill monk for herbs
                 // (escape bear)

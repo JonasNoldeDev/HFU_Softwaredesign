@@ -11,8 +11,8 @@ namespace Textadventure
 
         public static Game CurrentGame;
         public Character Player;
-        private int CurrentGameProgressStep = 0;
-        private bool GameOver = false;
+        public int CurrentGameProgressStep = 0;
+        private bool _gameOver = false;
         public GameStep[] GameProgressSteps;
 
         public Game(Action preset)
@@ -24,21 +24,24 @@ namespace Textadventure
 
         private void UpdateGameProgress()
         {
-            if (!GameOver && GameProgressSteps[CurrentGameProgressStep].NextStepCondition)
+            if (!_gameOver)
             {
-                CurrentGameProgressStep++;
-                Console.WriteLine(GameProgressSteps[CurrentGameProgressStep].DescriptionForReachingNextStep);
-            }
-            if (!GameOver && Player.Health <= 0)
-            {
-                CurrentGameProgressStep = -2; // -2 = game over
-                GameOver = true;
+                if (GameProgressSteps[CurrentGameProgressStep].NextStepCondition())
+                {
+                    CurrentGameProgressStep++;
+                }
+                if (Player.Health <= 0)
+                {
+                    CurrentGameProgressStep = -2; // -2 = game over
+                    _gameOver = true;
+                }
             }
             if (CurrentGameProgressStep == GameProgressSteps.Length)
             {
                 CurrentGameProgressStep = -3; // -3 = victory
-                GameOver = true;
+                _gameOver = true;
             }
+            if (!_gameOver) Console.WriteLine("! Quest: " + GameProgressSteps[CurrentGameProgressStep].DescriptionForReachingNextStep);
         }
 
         private void ParsePlayerInput(String input)
@@ -51,54 +54,52 @@ namespace Textadventure
                 case "drop":
                     foreach (var item in Player.Inventory)
                     {
-                        if (item.Name == parameter)
+                        if (item.UniqueID == parameter)
                         {
                             Player.RemoveFromInventory(item);
                             Player.CurrentArea.Things.Add(item);
-                            Console.WriteLine($"You dropped {item.Name} out of your inventory!");
-                            break;
+                            return;
                         }
                     }
-                    Console.WriteLine($"'{parameter}' is not in the inventory.");
+                    Console.WriteLine($"Item with the ID [{parameter}] is not in your inventory.");
                     break;
                 case "take":
                     foreach (var item in Player.CurrentArea.Things)
                     {
-                        if (item is Item && item.Name == parameter)
+                        if (item is Item && item.UniqueID == parameter)
                         {
                             if (Player.Inventory.Count < Player.InventorySize)
                             {
                                 Player.CurrentArea.Things.Remove(item);
                                 Player.AddToInventory((Item)item);
-                                Console.WriteLine($"{item.Name} has been added to your inventory!");
                             }
                             else
                             {
-                                Console.WriteLine("The inventory is full.");
+                                Console.WriteLine("Your inventory is full.");
                             }
-                            break;
+                            return;
                         }
                     }
-                    Console.WriteLine($"'{parameter}' is not in the area.");
+                    Console.WriteLine($"Item with the ID [{parameter}] is not in the area.");
                     break;
                 case "inventory":
                     if (Player.Inventory.Count == 0)
                     {
-                        Console.WriteLine($"I have no items at the moment.");
+                        Console.WriteLine($"You have no items at the moment.");
                     }
                     else
                     {
-                        Console.WriteLine($"Let's have a look at my belongings!");
+                        Console.WriteLine($"Let's have a look at your belongings!");
                         foreach(var Item in Player.Inventory)
                         {
-                            Helpers.WriteLine(Item.Name, Item.Color);
+                            Helpers.WriteLine(Item.Name + $" [{Item.UniqueID}]", Item.Color);
                         }
                     }
                     break;
                 case "attack":
                     foreach (var target in Player.CurrentArea.Things)
                     {
-                        if (target.Name == parameter)
+                        if (target.UniqueID == parameter)
                         {
                             if (target is Character)
                             {
@@ -111,88 +112,67 @@ namespace Textadventure
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"I'd never attack {character.Name}!");
+                                    Console.WriteLine($"You would really attack {character.Name}??");
                                 }
                             }
                             else
                             {
                                 Console.WriteLine("Why would you even attack this?");
                             }
-                            break;
+                            return;
                         }
                     }
-                    Console.WriteLine("My target doesn't seem to be here.");
+                    Console.WriteLine("Your target doesn't seem to be here.");
                     break;
                 case "explore":
-                    Helpers.WriteLine("I can see:");
+                    Helpers.WriteLine("You can see:");
 
                     if ((Player.CurrentArea.Things.Count) == 1) Helpers.Write("nothing..."); // 1 because of the player character itself
 
                     foreach (var thing in Player.CurrentArea.Things)
                     {
-                        if (thing is Item) Helpers.WriteLine(thing.Description, Item.Color);
-                        if (thing is Object) Helpers.WriteLine(thing.Description, Object.Color);
-                        if (thing is Character && thing != Game.CurrentGame.Player) Helpers.WriteLine(thing.Description, Character.Color);
+                        if (thing is Item) Helpers.WriteLine(thing.Description + $" [{thing.UniqueID}]", Item.Color);
+                        if (thing is Object) Helpers.WriteLine(thing.Description + $" [{thing.UniqueID}]", Object.Color);
+                        if (thing is Character && thing != Game.CurrentGame.Player) Helpers.WriteLine(thing.Description + $" [{thing.UniqueID}]", Character.Color);
+                    }
+
+                    foreach (var areaDirection in Player.CurrentArea.Directions)
+                    {
+                        Helpers.WriteLine($"{areaDirection.Value.Name} towards [{areaDirection.Key}]", Area.Color);
                     }
 
                     break;
                 case "inspect":
                     foreach (var thing in Player.CurrentArea.Things)
                     {
-                        if (thing.Name == parameter)
+                        if (thing.UniqueID == parameter)
                         {
                             Console.WriteLine(thing.Description);
-
                             if (thing is Character)
                             {
                                 Character character = (Character)thing;
                                 Console.WriteLine($"Health: {character.Health}, Attack: {character.Attack}");
                             }
-
-                            break;
+                            return;
                         }
                     }
-                    Console.WriteLine($"'{parameter}' is not in this area.");
+                    Console.WriteLine($"Nothing with the ID [{parameter}] is in this area.");
                     break;
                 case "move":
-                    int directionToMove = 0;
-
-                    switch(parameter)
+                    if (parameter != null && Player.CurrentArea.Directions.ContainsKey(parameter))
                     {
-                        case "north":
-                            directionToMove = 0;
-                            break;
-                        case "east":
-                            directionToMove = 1;
-                            break;
-                        case "south":
-                            directionToMove = 2;
-                            break;
-                        case "west":
-                            directionToMove = 3;
-                            break;
-                        case null:
-                            Console.WriteLine("Where are we moving?");
-                            break;
-                        default:
-                            Console.WriteLine("That's not even a direction to move.");
-                            break;
-                    }
-
-                    if (Player.CurrentArea.Directions[directionToMove] != null)
-                    {
-                        Player.MoveToArea(Player.CurrentArea.Directions[directionToMove]);
-                        Console.WriteLine($"You're now entering {Player.CurrentArea.Directions[directionToMove].Name}.");
+                        Player.MoveToArea(Player.CurrentArea.Directions[parameter]);
+                        Console.WriteLine($"You're now entering '{Player.CurrentArea.Name}'.");
                     }
                     else
                     {
-                        Console.WriteLine("You cannot move in this direction.");
+                        Console.WriteLine("You cannot move towards this direction.");
                     }
                     break;
                 case "interact":
                     foreach (var thing in Player.CurrentArea.Things)
                     {
-                        if (thing.Name == parameter)
+                        if (thing.UniqueID == parameter)
                         {
                             if (thing.Interaction != null)
                             {
@@ -202,14 +182,24 @@ namespace Textadventure
                             {
                                 Console.WriteLine("You can't interact with that.");
                             }
-                            break;
+                            return;
                         }
                     }
-                    Console.WriteLine($"I can't find '{parameter}'.");
+                    Console.WriteLine($"You can't see anything with the ID [{parameter}] here.");
+                    break;
+                case "help":
+                    Console.WriteLine("Available commands: drop [ID], take [ID], inventory, attack [ID], explore, inspect [ID], move [north/east/south/west], interact [ID], quit");
+                    Helpers.Write("Item [ID] ", Item.Color);
+                    Helpers.Write("Object [ID] ", Object.Color);
+                    Helpers.Write("Character [ID] ", Character.Color);
+                    Helpers.Write("Area [ID] ", Area.Color);
+                    Helpers.Write("\nExample: ");
+                    Helpers.Write("Harry Potters Cloak [7]", Item.Color);
+                    Helpers.Write(" - > take 7\n");
                     break;
                 case "quit":
                     CurrentGameProgressStep = -1; // -1 = quit
-                    GameOver = true;
+                    _gameOver = true;
                     break;
                 default:
                     Console.WriteLine($"Unknown command: '{command}'");
@@ -225,13 +215,11 @@ namespace Textadventure
         // Main game loop
         private void StartGame()
         {
-            Console.Write("Beginning narration.");
+            Console.WriteLine("Alcimedes: Welcome to my home, my druid apprentice! Could you do me a favor?");
+            Console.WriteLine("Type in 'help' to see all available commands!");
 
-            while (!GameOver)
+            while (!_gameOver)
             {
-                // Show player instructions and commands
-                Console.WriteLine("Available commands: ...");
-
                 // Get player input
                 Console.Write("> ");
                 string PlayerInput = Console.ReadLine();
@@ -252,10 +240,10 @@ namespace Textadventure
                     Console.WriteLine("I'm sad you wan't to leave. Bye!");
                     break;
                 case -2: // game over
-                    Console.WriteLine("Ending narration...");
+                    Console.WriteLine("You lost! Ending narration...");
                     break;
                 case -3: // victory
-                    Console.WriteLine("Ending narration...");
+                    Console.WriteLine("You won! Ending narration...");
                     break;
                 default:
                     break;

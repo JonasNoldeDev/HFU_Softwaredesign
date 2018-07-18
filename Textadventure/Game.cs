@@ -80,16 +80,16 @@ namespace Textadventure
                             return;
                         }
                     }
-                    Console.WriteLine($"Item with the ID [{parameter}] is not in the area.");
+                    Console.WriteLine($"Item with the ID [{parameter}] is not in the area or no item.");
                     break;
                 case "inventory":
                     if (Player.Inventory.Count == 0)
                     {
-                        Console.WriteLine($"You have no items at the moment.");
+                        Console.WriteLine("You have no items at the moment.");
                     }
                     else
                     {
-                        Console.WriteLine($"Let's have a look at your belongings!");
+                        Console.WriteLine("Let's have a look at your belongings!");
                         foreach(var Item in Player.Inventory)
                         {
                             Helpers.WriteLine(Item.Name + $" [{Item.UniqueID}]", Item.Color);
@@ -109,6 +109,7 @@ namespace Textadventure
                                     character.Health -= Player.Attack;
                                     Player.Health -= character.Attack;
                                     if (character.Health <= 0) character.Die();
+                                    if (Player.Health <= 0) Player.Die();
                                 }
                                 else
                                 {
@@ -126,8 +127,6 @@ namespace Textadventure
                     break;
                 case "explore":
                     Helpers.WriteLine("You can see:");
-
-                    if ((Player.CurrentArea.Things.Count) == 1) Helpers.Write("nothing..."); // 1 because of the player character itself
 
                     foreach (var thing in Player.CurrentArea.Things)
                     {

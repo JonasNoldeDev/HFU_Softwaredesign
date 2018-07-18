@@ -185,7 +185,7 @@ namespace Textadventure
             #endregion
             
             #region Add Interactions
-                void kettleInteraction()
+                kettle.Interaction = () =>
                 {
                     if (Game.CurrentGame.CurrentGameProgressStep <= 2)
                     {
@@ -220,9 +220,8 @@ namespace Textadventure
                         Console.WriteLine("The kettle is completely emty.");
                     }
                 };
-                kettle.Interaction = kettleInteraction;
 
-                void alcimedesInteraction()
+                alcimedes.Interaction = () =>
                 {
                     switch (Game.CurrentGame.CurrentGameProgressStep)
                     {
@@ -241,8 +240,12 @@ namespace Textadventure
                             Console.WriteLine("Alcimedes: What a nice day for a bourbon, huh?");
                             break;
                     }
-                }
-                alcimedes.Interaction = alcimedesInteraction;
+                };
+
+                bear.Interaction = () =>
+                {
+                    Console.WriteLine("Grrrrr!!");
+                };
 
                 // kill monk for herbs
                 // (escape bear)
